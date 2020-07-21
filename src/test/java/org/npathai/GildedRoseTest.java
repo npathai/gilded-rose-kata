@@ -127,4 +127,103 @@ class GildedRoseTest {
             assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
         }
     }
+
+    @Nested
+    class BackstagePasses {
+
+        @ParameterizedTest
+        @CsvSource({
+                "20, 10, 19, 11",
+                "11, 19, 10, 20",
+        })
+        public void longBeforeSellDateQualityIncreasesAtSlowerRate(int sellIn, int quality, int expectedSellIn,
+                                                                   int expectedQuality) {
+            gildedRose.addItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
+            gildedRose.tick();
+            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
+            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                "20, 49, 19, 50",
+                "11, 50, 10, 50",
+        })
+        public void longBeforeSellDateQualityDoesNotIncreaseMoreThanMaximum(int sellIn, int quality, int expectedSellIn,
+                                                                            int expectedQuality) {
+            gildedRose.addItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
+            gildedRose.tick();
+            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
+            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                "10, 10, 9, 12",
+                "9, 19, 8, 21",
+                "6, 20, 5, 22",
+                "6, 48, 5, 50"
+        })
+        public void mediumCloseToSellDateQualityIncreasesAtTwiceRate(int sellIn, int quality, int expectedSellIn,
+                                                                     int expectedQuality) {
+            gildedRose.addItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
+            gildedRose.tick();
+            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
+            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                "10, 49, 9, 50",
+                "10, 50, 9, 50",
+        })
+        public void mediumCloseToSellDateQualityDoesNotIncreaseMoreThanMaximum(int sellIn, int quality, int expectedSellIn,
+                                                                               int expectedQuality) {
+            gildedRose.addItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
+            gildedRose.tick();
+            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
+            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                "5, 10, 4, 13",
+                "4, 19, 3, 22",
+                "1, 20, 0, 23",
+                "1, 47, 0, 50"
+        })
+        public void veryCloseToSellDateQualityIncreasesAtThriceRate(int sellIn, int quality, int expectedSellIn,
+                                                                    int expectedQuality) {
+            gildedRose.addItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
+            gildedRose.tick();
+            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
+            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                "5, 48, 4, 50",
+                "4, 49, 3, 50",
+                "1, 50, 0, 50",
+        })
+        public void veryCloseToSellDateQualityDoesNotIncreaseMoreThanMaximum(int sellIn, int quality, int expectedSellIn,
+                                                                             int expectedQuality) {
+            gildedRose.addItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
+            gildedRose.tick();
+            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
+            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                "0, 48, -1, 0",
+                "-1, 50, -2, 0",
+        })
+        public void afterSellDateQualityDropsToZero(int sellIn, int quality, int expectedSellIn) {
+            gildedRose.addItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
+            gildedRose.tick();
+            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
+            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(0);
+        }
+    }
 }
