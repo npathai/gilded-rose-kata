@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.npathai.ItemAssertions.assertThatOnlyItem;
 
 class GildedRoseTest {
 
@@ -28,8 +29,10 @@ class GildedRoseTest {
         public void beforeSellDateQualityIncreases(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
             gildedRose.addItem(new Item("Aged Brie", sellIn, quality));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
         }
 
 
@@ -43,8 +46,10 @@ class GildedRoseTest {
                                                                  int expectedQuality) {
             gildedRose.addItem(new Item("Aged Brie", sellIn, quality));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
         }
 
         @ParameterizedTest
@@ -55,8 +60,10 @@ class GildedRoseTest {
         public void beforeSellDateWithMaxQualityItRemainsUnchanged(int sellIn, int expectedSellIn) {
             gildedRose.addItem(new Item("Aged Brie", sellIn, 50));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(50);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(50);
         }
 
         @ParameterizedTest
@@ -67,8 +74,10 @@ class GildedRoseTest {
         public void afterSellDateWithMaxQualityItRemainsUnchanged(int sellIn, int expectedSellIn) {
             gildedRose.addItem(new Item("Aged Brie", sellIn, 50));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(50);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(50);
         }
     }
 
@@ -83,8 +92,10 @@ class GildedRoseTest {
         public void beforeSellDateDoesntAge(int sellIn, int expectedSellIn) {
             gildedRose.addItem(new Item("Sulfuras, Hand of Ragnaros", sellIn, 10));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(10);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(10);
         }
 
         @ParameterizedTest
@@ -95,8 +106,10 @@ class GildedRoseTest {
         public void afterSellDateDoesntAge(int sellIn, int expectedSellIn) {
             gildedRose.addItem(new Item("Sulfuras, Hand of Ragnaros", sellIn, 10));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(10);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(10);
         }
 
         @ParameterizedTest
@@ -109,8 +122,10 @@ class GildedRoseTest {
         public void beforeSellDateQualityDoesntChange(int quality, int expectedQuality) {
             gildedRose.addItem(new Item("Sulfuras, Hand of Ragnaros", 1, quality));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(1);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(1)
+                    .hasQuality(expectedQuality);
         }
 
         @ParameterizedTest
@@ -123,8 +138,10 @@ class GildedRoseTest {
         public void afterSellDateQualityDoesntChange(int quality, int expectedQuality) {
             gildedRose.addItem(new Item("Sulfuras, Hand of Ragnaros", -1, quality));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(-1);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(-1)
+                    .hasQuality(expectedQuality);
         }
     }
 
@@ -140,8 +157,10 @@ class GildedRoseTest {
                                                                    int expectedQuality) {
             gildedRose.addItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
         }
 
         @ParameterizedTest
@@ -153,8 +172,10 @@ class GildedRoseTest {
                                                                             int expectedQuality) {
             gildedRose.addItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
         }
 
         @ParameterizedTest
@@ -168,8 +189,10 @@ class GildedRoseTest {
                                                                      int expectedQuality) {
             gildedRose.addItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
         }
 
         @ParameterizedTest
@@ -181,8 +204,10 @@ class GildedRoseTest {
                                                                                int expectedQuality) {
             gildedRose.addItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
         }
 
         @ParameterizedTest
@@ -196,8 +221,10 @@ class GildedRoseTest {
                                                                     int expectedQuality) {
             gildedRose.addItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
         }
 
         @ParameterizedTest
@@ -210,8 +237,10 @@ class GildedRoseTest {
                                                                              int expectedQuality) {
             gildedRose.addItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
         }
 
         @ParameterizedTest
@@ -222,8 +251,10 @@ class GildedRoseTest {
         public void afterSellDateQualityDropsToZero(int sellIn, int quality, int expectedSellIn) {
             gildedRose.addItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(0);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(0);
         }
     }
 
@@ -239,8 +270,10 @@ class GildedRoseTest {
         public void beforeSellDateQualityDecreases(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
             gildedRose.addItem(new Item("Amul Milk", sellIn, quality));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
         }
 
         @ParameterizedTest
@@ -251,8 +284,10 @@ class GildedRoseTest {
         public void beforeSellDateQualityDoesNotDropBelowZero(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
             gildedRose.addItem(new Item("Amul Milk", sellIn, quality));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
         }
 
         @ParameterizedTest
@@ -264,8 +299,10 @@ class GildedRoseTest {
         public void afterSellDateQualityDecreasesAtTwiceRate(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
             gildedRose.addItem(new Item("Amul Milk", sellIn, quality));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
         }
 
         @ParameterizedTest
@@ -276,8 +313,10 @@ class GildedRoseTest {
         public void afterSellDateQualityDoesNotDropBelowZero(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
             gildedRose.addItem(new Item("Amul Milk", sellIn, quality));
             gildedRose.tick();
-            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
-            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
         }
     }
 }
