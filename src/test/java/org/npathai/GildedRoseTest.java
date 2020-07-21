@@ -226,4 +226,58 @@ class GildedRoseTest {
             assertThat(gildedRose.getItems().get(0).quality).isEqualTo(0);
         }
     }
+
+    @Nested
+    class Normal {
+
+        @ParameterizedTest
+        @CsvSource({
+                "5, 10, 4, 9",
+                "1, 19, 0, 18",
+                "1, 1, 0, 0"
+        })
+        public void beforeSellDateQualityDecreases(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
+            gildedRose.addItem(new Item("Amul Milk", sellIn, quality));
+            gildedRose.tick();
+            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
+            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                "5, 0, 4, 0",
+                "1, 0, 0, 0"
+        })
+        public void beforeSellDateQualityDoesNotDropBelowZero(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
+            gildedRose.addItem(new Item("Amul Milk", sellIn, quality));
+            gildedRose.tick();
+            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
+            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                "0, 10, -1, 8",
+                "-1, 19, -2, 17",
+                "-1, 2, -2, 0"
+        })
+        public void afterSellDateQualityDecreasesAtTwiceRate(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
+            gildedRose.addItem(new Item("Amul Milk", sellIn, quality));
+            gildedRose.tick();
+            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
+            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                "0, 1, -1, 0",
+                "-1, 0, -2, 0",
+        })
+        public void afterSellDateQualityDoesNotDropBelowZero(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
+            gildedRose.addItem(new Item("Amul Milk", sellIn, quality));
+            gildedRose.tick();
+            assertThat(gildedRose.getItems().get(0).sellIn).isEqualTo(expectedSellIn);
+            assertThat(gildedRose.getItems().get(0).quality).isEqualTo(expectedQuality);
+        }
+    }
 }
