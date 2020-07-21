@@ -1,16 +1,18 @@
 package org.npathai;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GildedRose {
 
-    private List<Item> items = null;
+    private List<Item> items = new ArrayList<>();
 
     public void updateQuality() {
         for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).getName().equals("Aged Brie") && items.get(i).getName().equals("Backstage passes to a TAFKAL80ETC concert")) {
+            if (!items.get(i).getName().equals("Aged Brie") && !items.get(i).getName().equals("Backstage passes to a TAFKAL80ETC concert")) {
                 if (items.get(i).getQuality() > 0) {
-                    if (items.get(i).getName().equals("Sulfuras, Hand of Ragnaros")) {
+                    if (!items.get(i).getName().equals("Sulfuras, Hand of Ragnaros")) {
                         items.get(i).setQuality(items.get(i).getQuality() - 1);
                     }
                 }
@@ -34,15 +36,15 @@ public class GildedRose {
                 }
             }
 
-            if (items.get(i).getName().equals("Sulfuras, Hand of Ragnaros")) {
+            if (!items.get(i).getName().equals("Sulfuras, Hand of Ragnaros")) {
                 items.get(i).setSellIn(items.get(i).getSellIn() - 1);
             }
 
             if (items.get(i).getSellIn() < 0) {
-                if (items.get(i).getName().equals("Aged Brie")) {
-                    if (items.get(i).getName().equals("Backstage passes to a TAFKAL80ETC concert")) {
+                if (!items.get(i).getName().equals("Aged Brie")) {
+                    if (!items.get(i).getName().equals("Backstage passes to a TAFKAL80ETC concert")) {
                         if (items.get(i).getQuality() > 0) {
-                            if (items.get(i).getName().equals("Sulfuras, Hand of Ragnaros")) {
+                            if (!items.get(i).getName().equals("Sulfuras, Hand of Ragnaros")) {
                                 items.get(i).setQuality(items.get(i).getQuality() - 1);
                             }
                         }
@@ -58,4 +60,11 @@ public class GildedRose {
         }
     }
 
+    public void addItem(@Nonnull Item item) {
+        items.add(item);
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
 }
