@@ -22,13 +22,9 @@ public class GildedRose {
                     }
                 }
                 continue;
-            }
-
-            if (item.name.equals("Sulfuras, Hand of Ragnaros")) {
+            } else if (item.name.equals("Sulfuras, Hand of Ragnaros")) {
                 continue;
-            }
-
-            if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
+            } else if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
                 if (item.getQuality() < 50) {
                     item.setQuality(item.getQuality() + 1);
                 }
@@ -45,6 +41,17 @@ public class GildedRose {
                 item.setSellIn(item.getSellIn() - 1);
                 if (item.getSellIn() < 0) {
                     item.setQuality(0);
+                }
+                continue;
+            } else if (item.name.equals("Amul Milk")) {
+                if (item.getQuality() > 0) {
+                    item.setQuality(item.getQuality() - 1);
+                }
+                item.setSellIn(item.getSellIn() - 1);
+                if (item.getSellIn() < 0) {
+                    if (item.getQuality() > 0) {
+                        item.setQuality(item.getQuality() - 1);
+                    }
                 }
                 continue;
             }
