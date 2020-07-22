@@ -10,19 +10,21 @@ public class GildedRose {
 
     public void tick() {
         for (Item item : items) {
-            if (item.name.equals("Aged Brie")) {
-                agedBrieTick(item);
-                continue;
-            } else if (item.name.equals("Sulfuras, Hand of Ragnaros")) {
-                sulfurasTick();
-                continue;
-            } else if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                backstagePassTick(item);
-                continue;
-            } else {
-                normalTick(item);
-                continue;
-            }
+            ItemCategory itemCategory = createCategory(item);
+            itemCategory.tick();
+        }
+    }
+
+    private ItemCategory createCategory(Item item) {
+        switch (item.getName()) {
+            case "Aged Brie":
+                return new AgedBrie(item);
+            case "Sulfuras, Hand of Ragnaros":
+                return new Sulfuras(item);
+            case "Backstage passes to a TAFKAL80ETC concert":
+                return new BackstagePass(item);
+            default:
+                return new Normal(item);
         }
     }
 
@@ -82,5 +84,61 @@ public class GildedRose {
 
     public List<Item> getItems() {
         return items;
+    }
+
+    class ItemCategory {
+
+        public void tick() {
+
+        }
+    }
+
+    class AgedBrie extends ItemCategory {
+        private final Item item;
+
+        public AgedBrie(Item item) {
+            this.item = item;
+        }
+
+        public void tick() {
+            agedBrieTick(item);
+        }
+    }
+
+    class Sulfuras extends ItemCategory {
+
+        private final Item item;
+
+        public Sulfuras(Item item) {
+            this.item = item;
+        }
+
+        public void tick() {
+            sulfurasTick();
+        }
+    }
+
+    private class BackstagePass extends ItemCategory {
+        private final Item item;
+
+        public BackstagePass(Item item) {
+            this.item = item;
+        }
+
+        public void tick() {
+            backstagePassTick(item);
+        }
+    }
+
+    private class Normal extends ItemCategory {
+        private final Item item;
+
+        public Normal(Item item) {
+            this.item = item;
+        }
+
+        public void tick() {
+            normalTick(item);
+        }
     }
 }
