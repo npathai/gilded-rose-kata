@@ -6,7 +6,7 @@ import java.util.List;
 
 public class GildedRose {
 
-    private List<Item> items = new ArrayList<>();
+    private final List<Item> items = new ArrayList<>();
 
     public void tick() {
         for (Item item : items) {
@@ -28,56 +28,6 @@ public class GildedRose {
         }
     }
 
-    private void backstagePassTick(Item item) {
-        decrementSellIn(item);
-        incrementQuality(item);
-        if (item.getSellIn() < 10) {
-            incrementQuality(item);
-        }
-        if (item.getSellIn() < 5) {
-            incrementQuality(item);
-        }
-        if (item.getSellIn() < 0) {
-            item.setQuality(0);
-        }
-    }
-
-    private void sulfurasTick() {
-
-    }
-
-    private void agedBrieTick(Item item) {
-        decrementSellIn(item);
-        incrementQuality(item);
-        if (item.getSellIn() < 0) {
-            incrementQuality(item);
-        }
-    }
-
-    private void normalTick(Item item) {
-        decrementSellIn(item);
-        decrementQuality(item);
-        if (item.getSellIn() < 0) {
-            decrementQuality(item);
-        }
-    }
-
-    private void decrementSellIn(Item item) {
-        item.setSellIn(item.getSellIn() - 1);
-    }
-
-    private void decrementQuality(Item item) {
-        if (item.getQuality() > 0) {
-            item.setQuality(item.getQuality() - 1);
-        }
-    }
-
-    private void incrementQuality(Item item) {
-        if (item.getQuality() < 50) {
-            item.setQuality(item.getQuality() + 1);
-        }
-    }
-
     public void addItem(@Nonnull Item item) {
         items.add(item);
     }
@@ -86,59 +36,109 @@ public class GildedRose {
         return items;
     }
 
-    class ItemCategory {
+    static class ItemCategory {
+
+        private final Item item;
+
+        public ItemCategory(Item item) {
+            this.item = item;
+        }
 
         public void tick() {
 
         }
+
+        protected void decrementSellIn() {
+            item.setSellIn(item.getSellIn() - 1);
+        }
+
+        protected void decrementQuality() {
+            if (item.getQuality() > 0) {
+                item.setQuality(item.getQuality() - 1);
+            }
+        }
+
+        protected void incrementQuality() {
+            if (item.getQuality() < 50) {
+                item.setQuality(item.getQuality() + 1);
+            }
+        }
+
+        public Item getItem() {
+            return item;
+        }
     }
 
-    class AgedBrie extends ItemCategory {
-        private final Item item;
+    static class AgedBrie extends ItemCategory {
 
         public AgedBrie(Item item) {
-            this.item = item;
+            super(item);
         }
 
         public void tick() {
-            agedBrieTick(item);
+            agedBrieTick();
+        }
+
+        private void agedBrieTick() {
+            decrementSellIn();
+            incrementQuality();
+            if (getItem().getSellIn() < 0) {
+                incrementQuality();
+            }
         }
     }
 
-    class Sulfuras extends ItemCategory {
-
-        private final Item item;
+    static class Sulfuras extends ItemCategory {
 
         public Sulfuras(Item item) {
-            this.item = item;
+            super(item);
         }
 
         public void tick() {
-            sulfurasTick();
+
         }
     }
 
-    private class BackstagePass extends ItemCategory {
-        private final Item item;
-
+    private static class BackstagePass extends ItemCategory {
         public BackstagePass(Item item) {
-            this.item = item;
+            super(item);
         }
 
         public void tick() {
-            backstagePassTick(item);
+            backstagePassTick();
+        }
+
+        private void backstagePassTick() {
+            decrementSellIn();
+            incrementQuality();
+            if (getItem().getSellIn() < 10) {
+                incrementQuality();
+            }
+            if (getItem().getSellIn() < 5) {
+                incrementQuality();
+            }
+            if (getItem().getSellIn() < 0) {
+                getItem().setQuality(0);
+            }
         }
     }
 
-    private class Normal extends ItemCategory {
-        private final Item item;
+    private static class Normal extends ItemCategory {
 
         public Normal(Item item) {
-            this.item = item;
+            super(item);
         }
 
         public void tick() {
-            normalTick(item);
+            normalTick();
+        }
+
+        private void normalTick() {
+            decrementSellIn();
+            decrementQuality();
+            if (getItem().getSellIn() < 0) {
+                decrementQuality();
+            }
         }
     }
 }
