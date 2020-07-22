@@ -18,9 +18,9 @@ public class GildedRose {
     private ItemCategory createCategory(Item item) {
         switch (item.getName()) {
             case "Aged Brie":
-                return new AgedBrie(item);
+                return new Cheese(item);
             case "Sulfuras, Hand of Ragnaros":
-                return new Sulfuras(item);
+                return new Legendary(item);
             case "Backstage passes to a TAFKAL80ETC concert":
                 return new BackstagePass(item);
             default:
@@ -69,17 +69,13 @@ public class GildedRose {
         }
     }
 
-    static class AgedBrie extends ItemCategory {
+    static class Cheese extends ItemCategory {
 
-        public AgedBrie(Item item) {
+        public Cheese(Item item) {
             super(item);
         }
 
         public void tick() {
-            agedBrieTick();
-        }
-
-        private void agedBrieTick() {
             decrementSellIn();
             incrementQuality();
             if (getItem().getSellIn() < 0) {
@@ -88,14 +84,10 @@ public class GildedRose {
         }
     }
 
-    static class Sulfuras extends ItemCategory {
+    static class Legendary extends ItemCategory {
 
-        public Sulfuras(Item item) {
+        public Legendary(Item item) {
             super(item);
-        }
-
-        public void tick() {
-
         }
     }
 
@@ -105,10 +97,6 @@ public class GildedRose {
         }
 
         public void tick() {
-            backstagePassTick();
-        }
-
-        private void backstagePassTick() {
             decrementSellIn();
             incrementQuality();
             if (getItem().getSellIn() < 10) {
@@ -130,10 +118,6 @@ public class GildedRose {
         }
 
         public void tick() {
-            normalTick();
-        }
-
-        private void normalTick() {
             decrementSellIn();
             decrementQuality();
             if (getItem().getSellIn() < 0) {
