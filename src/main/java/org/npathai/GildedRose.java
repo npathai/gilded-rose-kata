@@ -10,37 +10,53 @@ public class GildedRose {
 
     public void tick() {
         for (Item item : items) {
-
             if (item.name.equals("Aged Brie")) {
-                incrementQuality(item);
-                decrementSellIn(item);
-                if (item.getSellIn() < 0) {
-                    incrementQuality(item);
-                }
+                agedBrieTick(item);
                 continue;
             } else if (item.name.equals("Sulfuras, Hand of Ragnaros")) {
+                sulfurasTick();
                 continue;
             } else if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                incrementQuality(item);
-                if (item.getSellIn() < 11) {
-                    incrementQuality(item);
-                }
-                if (item.getSellIn() < 6) {
-                    incrementQuality(item);
-                }
-                decrementSellIn(item);
-                if (item.getSellIn() < 0) {
-                    item.setQuality(0);
-                }
+                backstagePassTick(item);
                 continue;
             } else {
-                decrementQuality(item);
-                decrementSellIn(item);
-                if (item.getSellIn() < 0) {
-                    decrementQuality(item);
-                }
+                normalTick(item);
                 continue;
             }
+        }
+    }
+
+    private void backstagePassTick(Item item) {
+        decrementSellIn(item);
+        incrementQuality(item);
+        if (item.getSellIn() < 10) {
+            incrementQuality(item);
+        }
+        if (item.getSellIn() < 5) {
+            incrementQuality(item);
+        }
+        if (item.getSellIn() < 0) {
+            item.setQuality(0);
+        }
+    }
+
+    private void sulfurasTick() {
+
+    }
+
+    private void agedBrieTick(Item item) {
+        decrementSellIn(item);
+        incrementQuality(item);
+        if (item.getSellIn() < 0) {
+            incrementQuality(item);
+        }
+    }
+
+    private void normalTick(Item item) {
+        decrementSellIn(item);
+        decrementQuality(item);
+        if (item.getSellIn() < 0) {
+            decrementQuality(item);
         }
     }
 
