@@ -23,6 +23,8 @@ public class GildedRose {
                 return new Legendary(item);
             case "Backstage passes to a TAFKAL80ETC concert":
                 return new BackstagePass(item);
+            case "Conjured":
+                return new Conjured(item);
             default:
                 return new Normal(item);
         }
@@ -123,6 +125,19 @@ public class GildedRose {
             if (getItem().getSellIn() < 0) {
                 decrementQuality();
             }
+        }
+    }
+
+    private class Conjured extends ItemCategory {
+        public Conjured(Item item) {
+            super(item);
+        }
+
+        @Override
+        public void tick() {
+            decrementSellIn();
+            decrementQuality();
+            decrementQuality();
         }
     }
 }

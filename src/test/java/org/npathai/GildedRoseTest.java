@@ -318,4 +318,65 @@ class GildedRoseTest {
                     .hasQuality(expectedQuality);
         }
     }
+
+    @Nested
+    class Conjured {
+
+        @ParameterizedTest
+        @CsvSource({
+                "10, 20, 9, 18",
+                "5, 15, 4, 13",
+        })
+        public void beforeSellDateQualityDropsAtTwiceRate(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
+            gildedRose.addItem(new Item("Conjured", sellIn, quality));
+            gildedRose.tick();
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                "5, 0, 4, 0",
+                "1, 0, 0, 0"
+        })
+        public void beforeSellDateQualityDoesNotDropBelowZero(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
+            gildedRose.addItem(new Item("Conjured", sellIn, quality));
+            gildedRose.tick();
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                "0, 10, -1, 8",
+                "-1, 19, -2, 17",
+                "-1, 2, -2, 0"
+        })
+        public void afterSellDateQualityDropsAtTwiceRate(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
+            gildedRose.addItem(new Item("Conjured", sellIn, quality));
+            gildedRose.tick();
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                "0, 1, -1, 0",
+                "-1, 0, -2, 0",
+        })
+        public void afterSellDateQualityDoesNotDropBelowZero(int sellIn, int quality, int expectedSellIn, int expectedQuality) {
+            gildedRose.addItem(new Item("Conjured", sellIn, quality));
+            gildedRose.tick();
+
+            assertThatOnlyItem(gildedRose.getItems())
+                    .hasSellIn(expectedSellIn)
+                    .hasQuality(expectedQuality);
+        }
+    }
 }
