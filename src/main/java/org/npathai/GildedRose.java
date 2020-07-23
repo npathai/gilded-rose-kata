@@ -38,8 +38,10 @@ public class GildedRose {
         return items;
     }
 
-    static class ItemCategory {
+    static abstract class ItemCategory {
 
+        public static final int MAX_QUALITY = 50;
+        public static final int MIN_QUALITY = 0;
         private final Item item;
 
         public ItemCategory(Item item) {
@@ -47,27 +49,38 @@ public class GildedRose {
         }
 
         public void tick() {
-
+            updateSellIn();
+            updateQuality();
         }
 
-        protected void decrementSellIn() {
+        protected void updateSellIn() {
+            decrementSellIn();
+        }
+
+        protected abstract void updateQuality();
+
+        protected final void decrementSellIn() {
             item.setSellIn(item.getSellIn() - 1);
         }
 
-        protected void decrementQuality() {
-            if (item.getQuality() > 0) {
+        protected final void decrementQuality() {
+            if (item.getQuality() > MIN_QUALITY) {
                 item.setQuality(item.getQuality() - 1);
             }
         }
 
-        protected void incrementQuality() {
-            if (item.getQuality() < 50) {
+        protected final void incrementQuality() {
+            if (item.getQuality() < MAX_QUALITY) {
                 item.setQuality(item.getQuality() + 1);
             }
         }
 
         public Item getItem() {
             return item;
+        }
+
+        protected final boolean hasExpired() {
+            return item.getSellIn() < 0;
         }
     }
 
@@ -77,10 +90,10 @@ public class GildedRose {
             super(item);
         }
 
-        public void tick() {
-            decrementSellIn();
+        @Override
+        protected void updateQuality() {
             incrementQuality();
-            if (getItem().getSellIn() < 0) {
+            if (hasExpired()) {
                 incrementQuality();
             }
         }
@@ -91,6 +104,16 @@ public class GildedRose {
         public Legendary(Item item) {
             super(item);
         }
+
+        @Override
+        protected void updateSellIn() {
+            // Doesn't age
+        }
+
+        @Override
+        protected void updateQuality() {
+            // Doesn't degrade
+        }
     }
 
     private static class BackstagePass extends ItemCategory {
@@ -98,8 +121,8 @@ public class GildedRose {
             super(item);
         }
 
-        public void tick() {
-            decrementSellIn();
+        @Override
+        protected void updateQuality() {
             incrementQuality();
             if (getItem().getSellIn() < 10) {
                 incrementQuality();
@@ -107,7 +130,7 @@ public class GildedRose {
             if (getItem().getSellIn() < 5) {
                 incrementQuality();
             }
-            if (getItem().getSellIn() < 0) {
+            if (hasExpired()) {
                 getItem().setQuality(0);
             }
         }
@@ -119,23 +142,22 @@ public class GildedRose {
             super(item);
         }
 
-        public void tick() {
-            decrementSellIn();
+        @Override
+        protected void updateQuality() {
             decrementQuality();
-            if (getItem().getSellIn() < 0) {
+            if (hasExpired()) {
                 decrementQuality();
             }
         }
     }
 
-    private class Conjured extends ItemCategory {
+    private static class Conjured extends ItemCategory {
         public Conjured(Item item) {
             super(item);
         }
 
         @Override
-        public void tick() {
-            decrementSellIn();
+        protected void updateQuality() {
             decrementQuality();
             decrementQuality();
         }
